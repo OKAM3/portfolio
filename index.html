@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Lance Nelson — Server Administration Portfolio</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Lance Nelson</h1>
+          <p>Server Administrator • Neumont University</p>
+        </div>
+      </div>
+
+      <nav aria-label="Primary">
+        <button class="nav-btn" data-target="projects" aria-current="page">
+          <span class="nav-ico" aria-hidden="true">🧩</span>
+          <span class="nav-text"><strong>Projects</strong><span>Builds & labs</span></span>
+        </button>
+        <button class="nav-btn" data-target="skills">
+          <span class="nav-ico" aria-hidden="true">🛠️</span>
+          <span class="nav-text"><strong>Skills</strong><span>Tools & strengths</span></span>
+        </button>
+        <button class="nav-btn" data-target="experience">
+          <span class="nav-ico" aria-hidden="true">📌</span>
+          <span class="nav-text"><strong>Experience</strong><span>Education & certs</span></span>
+        </button>
+        <button class="nav-btn" data-target="contact">
+          <span class="nav-ico" aria-hidden="true">✉️</span>
+          <span class="nav-text"><strong>Contact</strong><span>Get in touch</span></span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-pill" role="status" aria-live="polite">
+          <div class="status-left">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <strong>Available for opportunities</strong>
+              <small class="mono" id="uptimeText">Session: 00:00:00</small>
+            </div>
+          </div>
+          <span class="badge good">ONLINE</span>
+        </div>
+
+        <button class="btn" id="toggleStars" type="button" aria-pressed="true">
+          Toggle Background FX
+        </button>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <div class="title">
+          <h2 id="pageTitle">Projects</h2>
+          <p id="pageDesc">
+            CompTIA A+ and Security+ certified Server Administrator with home lab experience, Python skills, and foundational networking.
+          </p>
+        </div>
+        <div class="toolbar">
+          <div class="chip"><span aria-hidden="true">🕒</span><span class="mono" id="clock">--:--:--</span></div>
+          <div class="chip"><span aria-hidden="true">🧾</span><span>A+ • Security+</span></div>
+          <button class="btn primary" type="button" id="runCheck">Refresh Demo Data</button>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- PROJECTS -->
+        <section id="projects">
+          <div class="grid">
+            <div class="card span-12">
+              <h3>
+                Technical Projects
+                <span class="badge good">Hands-On Portfolio</span>
+              </h3>
+              <p class="meta">
+                I build and maintain home lab environments to practice real server administration, security, and networking workflows.
+                Below are a few example projects ive done in the past
+            </div>
+
+            <div class="card span-6">
+              <h3>Multi-Disk Linux Server Deployment <span class="badge good">Rocky Linux</span></h3>
+              <p class="meta">
+                Deployed Rocky Linux using a multi-disk layout with <span class="mono">/var</span> on a separate drive to improve
+                logging isolation and organization. Verified the final layout using <span class="mono">df</span>.
+              </p>
+              <p class="meta" style="margin-top:10px;">
+                Tools: <span class="mono">Rocky Linux</span>, partitioning, CLI
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Virtualized Home Lab Environment <span class="badge good">VMware / VirtualBox</span></h3>
+              <p class="meta">
+                Built multiple VMs for server testing and created isolated networks to safely simulate real environments.
+                Practiced troubleshooting, IP setup, and service connectivity.
+              </p>
+              <p class="meta" style="margin-top:10px;">
+                Tools: <span class="mono">VMware</span>, <span class="mono">VirtualBox</span>, host-only networking
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>PBX / VoIP Server Lab <span class="badge warn">In Progress</span></h3>
+              <p class="meta">
+                Installed and configured a PBX environment with voicemail and basic call routing.
+                Focused on stability, documentation, and repeatable setup steps.
+              </p>
+              <p class="meta" style="margin-top:10px;">
+                Tools: <span class="mono">FreePBX / 3CX</span>, admin docs
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Python Automation Utilities <span class="badge">Scripting</span></h3>
+              <p class="meta">
+                Wrote Python scripts to automate repetitive admin tasks and support monitoring/log review.
+                I enjoy using automation to save time and reduce mistakes.
+              </p>
+              <p class="meta" style="margin-top:10px;">
+                Tools: <span class="mono">Python</span>, parsing, basic monitoring
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" hidden>
+          <div class="grid">
+            <div class="card span-12">
+              <h3>
+                Skills
+                <span class="badge">Server Admin Focus</span>
+              </h3>
+              <p class="meta">
+                Strong fundamentals across server administration, security, scripting, and networking built through certifications and hands on home lab practice.
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Operating Systems</h3>
+              <p class="meta">
+                • Linux (Rocky, Ubuntu)<br/>
+                • Windows environments<br/>
+                • Users, groups, permissions<br/>
+                • Service management and configuration
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Virtualization & Lab Work</h3>
+              <p class="meta">
+                • VMware / VirtualBox<br/>
+                • VM provisioning and snapshots<br/>
+                • Isolated virtual networks<br/>
+                • Troubleshooting lab environments
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Security</h3>
+              <p class="meta">
+                • CompTIA Security+ certified<br/>
+                • Access control fundamentals<br/>
+                • Patch management mindset<br/>
+                • Secure configuration basics
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Python & Automation</h3>
+              <p class="meta">
+                • Python scripting for admin tasks<br/>
+                • Log parsing and simple tooling<br/>
+                • Clean, readable code style<br/>
+                • Automation to reduce manual errors
+              </p>
+            </div>
+
+            <div class="card span-12">
+              <h3>Networking (Foundations)</h3>
+              <p class="meta">
+                • IP addressing and subnetting basics<br/>
+                • Host-only / isolated networking in labs<br/>
+                • Connectivity troubleshooting (ping, DNS basics)<br/>
+                • Understanding how services communicate
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" hidden>
+          <div class="grid">
+            <div class="card span-12">
+              <h3>Experience</h3>
+              <p class="meta">
+                I’m Lance Nelson, a CompTIA A+ and Security+ certified Server Administrator and a student at Neumont University.
+                I graduate in September 2027 with my bachelor’s degree. I enjoy building home lab environments, working with servers,
+                automating tasks with Python, and strengthening my networking skills.
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Certifications</h3>
+              <p class="meta">
+                • CompTIA A+<br/>
+                • CompTIA Security+<br/>
+              </p>
+            </div>
+
+            <div class="card span-6">
+              <h3>Education</h3>
+              <p class="meta">
+                Neumont University<br/>
+                Bachelor’s Degree — Expected September 2027
+              </p>
+            </div>
+
+            <div class="card span-12">
+              <h3>Home Lab Focus</h3>
+              <p class="meta">
+                • Building multi-VM server environments<br/>
+                • Testing services, permissions, and configurations<br/>
+                • Practicing backups, updates, and stability habits<br/>
+                • Learning by breaking things safely and fixing them
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" hidden>
+          <div class="grid">
+            <div class="card span-6">
+              <h3>Contact</h3>
+              <p class="meta">
+                Want to connect about internships, entry level roles, or projects? Send a message below.
+              </p>
+
+              <form class="form" onsubmit="event.preventDefault(); fakeSubmit();">
+                <label>
+                  Name
+                  <input name="name" autocomplete="name" placeholder="Your name" required />
+                </label>
+                <label>
+                  Email
+                  <input name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+                </label>
+                <label>
+                  Message
+                  <textarea name="message" placeholder="How can we work together?" required></textarea>
+                </label>
+                <button class="btn primary" type="submit">Send Message</button>
+                <p class="meta" id="formStatus" role="status" aria-live="polite" style="margin:0;"></p>
+              </form>
+            </div>
+
+            <div class="card span-6">
+              <h3>Quick Info</h3>
+              <p class="meta">
+                Name: <span class="mono">Lance Nelson</span><br/>
+                Focus: <span class="mono">Server Administration</span><br/>
+                Certifications: <span class="mono">CompTIA A+ • Security+</span><br/>
+                School: <span class="mono">Neumont University</span><br/>
+                Graduation: <span class="mono">September 2027</span>
+              </p>
+
+              <div class="kpis" style="margin-top:14px">
+                <div class="kpi"><strong class="mono">Linux</strong><span>Admin skills</span></div>
+                <div class="kpi"><strong class="mono">Python</strong><span>Automation</span></div>
+                <div class="kpi"><strong class="mono">Labs</strong><span>Hands-on practice</span></div>
+              </div>
+
+              <p class="meta" style="margin-top:12px">
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
