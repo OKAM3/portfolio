@@ -11,6 +11,7 @@
 <body>
   <canvas id="stars" aria-hidden="true"></canvas>
   <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
 
   <div class="app">
     <aside>
@@ -23,6 +24,7 @@
       </div>
 
       <nav aria-label="Primary">
+        <div class="nav-indicator" id="navIndicator" aria-hidden="true"></div>
         <button class="nav-btn" data-target="projects" aria-current="page">
           <span class="nav-ico" aria-hidden="true">🧩</span>
           <span class="nav-text"><strong>Projects</strong><span>Builds & labs</span></span>
@@ -79,17 +81,56 @@
         <!-- PROJECTS -->
         <section id="projects">
           <div class="grid">
-            <div class="card span-12">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
               <h3>
                 Technical Projects
                 <span class="badge good">Hands-On Portfolio</span>
               </h3>
               <p class="meta">
                 I build and maintain home lab environments to practice real server administration, security, and networking workflows.
-                Below are a few example projects ive done in the past
+                Below are a few example projects I've done in the past.
+              </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
+              <h3>
+                Home Lab Telemetry
+                <span class="badge" id="telemetryBadge">Live Snapshot</span>
+              </h3>
+              <p class="meta">Hit "Refresh Demo Data" up top to pull a new reading from the lab.</p>
+              <div class="telemetry" id="telemetry">
+                <div class="gauge">
+                  <svg width="52" height="52" viewBox="0 0 52 52">
+                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
+                    <circle class="gauge-ring" id="gaugeCpu" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
+                  </svg>
+                  <div class="gauge-info"><strong id="valCpu">0%</strong><span>CPU · hv1</span></div>
+                </div>
+                <div class="gauge">
+                  <svg width="52" height="52" viewBox="0 0 52 52">
+                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
+                    <circle class="gauge-ring" id="gaugeMem" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
+                  </svg>
+                  <div class="gauge-info"><strong id="valMem">0%</strong><span>Memory · hv1</span></div>
+                </div>
+                <div class="gauge">
+                  <svg width="52" height="52" viewBox="0 0 52 52">
+                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
+                    <circle class="gauge-ring" id="gaugeDisk" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
+                  </svg>
+                  <div class="gauge-info"><strong id="valDisk">0%</strong><span>Disk · /var</span></div>
+                </div>
+                <div class="gauge">
+                  <svg width="52" height="52" viewBox="0 0 52 52">
+                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
+                    <circle class="gauge-ring" id="gaugeVms" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
+                  </svg>
+                  <div class="gauge-info"><strong id="valVms">0</strong><span>VMs Online</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Multi-Disk Linux Server Deployment <span class="badge good">Rocky Linux</span></h3>
               <p class="meta">
                 Deployed Rocky Linux using a multi-disk layout with <span class="mono">/var</span> on a separate drive to improve
@@ -100,7 +141,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Virtualized Home Lab Environment <span class="badge good">VMware / VirtualBox</span></h3>
               <p class="meta">
                 Built multiple VMs for server testing and created isolated networks to safely simulate real environments.
@@ -111,7 +152,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>PBX / VoIP Server Lab <span class="badge warn">In Progress</span></h3>
               <p class="meta">
                 Installed and configured a PBX environment with voicemail and basic call routing.
@@ -122,7 +163,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Python Automation Utilities <span class="badge">Scripting</span></h3>
               <p class="meta">
                 Wrote Python scripts to automate repetitive admin tasks and support monitoring/log review.
@@ -138,7 +179,7 @@
         <!-- SKILLS -->
         <section id="skills" hidden>
           <div class="grid">
-            <div class="card span-12">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
               <h3>
                 Skills
                 <span class="badge">Server Admin Focus</span>
@@ -148,7 +189,34 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-12" id="skillMeterCard"><span class="card-scan" aria-hidden="true"></span>
+              <h3>
+                Proficiency
+                <span class="badge good">Self-Rated</span>
+              </h3>
+              <div class="skill-meter" data-percent="88">
+                <div class="skill-meter-head"><strong>Linux Administration</strong><span class="mono skill-meter-val">0%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
+              </div>
+              <div class="skill-meter" data-percent="70">
+                <div class="skill-meter-head"><strong>Python / Automation</strong><span class="mono skill-meter-val">0%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
+              </div>
+              <div class="skill-meter" data-percent="82">
+                <div class="skill-meter-head"><strong>Virtualization (VMware / VirtualBox)</strong><span class="mono skill-meter-val">0%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
+              </div>
+              <div class="skill-meter" data-percent="75">
+                <div class="skill-meter-head"><strong>Security Fundamentals</strong><span class="mono skill-meter-val">0%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
+              </div>
+              <div class="skill-meter" data-percent="60">
+                <div class="skill-meter-head"><strong>Networking Foundations</strong><span class="mono skill-meter-val">0%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
+              </div>
+            </div>
+
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Operating Systems</h3>
               <p class="meta">
                 • Linux (Rocky, Ubuntu)<br/>
@@ -158,7 +226,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Virtualization & Lab Work</h3>
               <p class="meta">
                 • VMware / VirtualBox<br/>
@@ -168,7 +236,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Security</h3>
               <p class="meta">
                 • CompTIA Security+ certified<br/>
@@ -178,7 +246,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Python & Automation</h3>
               <p class="meta">
                 • Python scripting for admin tasks<br/>
@@ -188,7 +256,7 @@
               </p>
             </div>
 
-            <div class="card span-12">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
               <h3>Networking (Foundations)</h3>
               <p class="meta">
                 • IP addressing and subnetting basics<br/>
@@ -203,7 +271,7 @@
         <!-- EXPERIENCE -->
         <section id="experience" hidden>
           <div class="grid">
-            <div class="card span-12">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
               <h3>Experience</h3>
               <p class="meta">
                 I’m Lance Nelson, a CompTIA A+ and Security+ certified Server Administrator and a student at Neumont University.
@@ -212,7 +280,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Certifications</h3>
               <p class="meta">
                 • CompTIA A+<br/>
@@ -220,7 +288,7 @@
               </p>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Education</h3>
               <p class="meta">
                 Neumont University<br/>
@@ -228,7 +296,7 @@
               </p>
             </div>
 
-            <div class="card span-12">
+            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
               <h3>Home Lab Focus</h3>
               <p class="meta">
                 • Building multi-VM server environments<br/>
@@ -243,7 +311,7 @@
         <!-- CONTACT -->
         <section id="contact" hidden>
           <div class="grid">
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Contact</h3>
               <p class="meta">
                 Want to connect about internships, entry level roles, or projects? Send a message below.
@@ -267,7 +335,7 @@
               </form>
             </div>
 
-            <div class="card span-6">
+            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
               <h3>Quick Info</h3>
               <p class="meta">
                 Name: <span class="mono">Lance Nelson</span><br/>
