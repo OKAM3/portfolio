@@ -10,16 +10,6 @@ const titles = {
 const navButtons = [...document.querySelectorAll(".nav-btn")];
 const pageTitle = document.getElementById("pageTitle");
 const pageDesc = document.getElementById("pageDesc");
-const navIndicator = document.getElementById("navIndicator");
-
-function moveNavIndicator(btn){
-  if (!navIndicator || !btn) return;
-  const navRect = btn.parentElement.getBoundingClientRect();
-  const r = btn.getBoundingClientRect();
-  navIndicator.style.opacity = "1";
-  navIndicator.style.height = r.height + "px";
-  navIndicator.style.transform = `translateY(${r.top - navRect.top}px)`;
-}
 
 function showSection(id){
   sections.forEach(s => {
@@ -30,21 +20,6 @@ function showSection(id){
   pageTitle.textContent = titles[id][0];
   pageDesc.textContent = titles[id][1];
   history.replaceState(null, "", "#" + id);
-
-  const activeBtn = navButtons.find(b => b.dataset.target === id);
-  moveNavIndicator(activeBtn);
-
-  // Stagger-in the cards for the newly visible section
-  const grid = document.querySelector(`#${id} .grid`);
-  if (grid){
-    grid.classList.remove("entering");
-    // force reflow so the animation replays every time
-    void grid.offsetWidth;
-    grid.classList.add("entering");
-  }
-
-  // Animate skill meters into view the first time Skills is shown
-  if (id === "skills") animateSkillMeters();
 }
 
 navButtons.forEach(btn => {
@@ -54,38 +29,6 @@ navButtons.forEach(btn => {
 // On load, respect hash
 const hash = (location.hash || "#projects").replace("#","");
 showSection(sections.includes(hash) ? hash : "projects");
-window.addEventListener("resize", () => {
-  const activeBtn = navButtons.find(b => b.getAttribute("aria-current") === "page");
-  moveNavIndicator(activeBtn);
-});
-
-// --------- Skill meters ----------
-let skillsAnimated = false;
-function animateSkillMeters(){
-  if (skillsAnimated) return;
-  skillsAnimated = true;
-  document.querySelectorAll(".skill-meter").forEach((meter, i) => {
-    const pct = Number(meter.dataset.percent || 0);
-    const fill = meter.querySelector(".skill-meter-fill");
-    const val = meter.querySelector(".skill-meter-val");
-    setTimeout(() => {
-      fill.style.width = pct + "%";
-      countUp(val, 0, pct, 700, "%");
-    }, i * 110);
-  });
-}
-
-function countUp(el, from, to, duration, suffix=""){
-  const start = performance.now();
-  function frame(now){
-    const p = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    const current = Math.round(from + (to - from) * eased);
-    el.textContent = current + suffix;
-    if (p < 1) requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-}
 
 // --------- Clock + "session" timer ----------
 const clock = document.getElementById("clock");
@@ -106,115 +49,23 @@ tick();
 
 // --------- Demo interactions ----------
 const runCheckBtn = document.getElementById("runCheck");
-const telemetryBadge = document.getElementById("telemetryBadge");
-
-const GAUGE_CIRC = 131.9; // 2 * PI * r(21)
-function setGaugeRing(ringId, pct){
-  const ring = document.getElementById(ringId);
-  if (!ring) return;
-  ring.style.strokeDashoffset = String(GAUGE_CIRC * (1 - pct / 100));
-}
-function setGauge(ringId, valId, pct, suffix="%"){
-  setGaugeRing(ringId, pct);
-  const val = document.getElementById(valId);
-  if (!val) return;
-  countUp(val, Number(val.dataset.last || 0), pct, 700, suffix);
-  val.dataset.last = pct;
-}
-
-function refreshTelemetry(){
-  const cpu = Math.round(20 + Math.random()*55);
-  const mem = Math.round(30 + Math.random()*45);
-  const disk = Math.round(35 + Math.random()*40);
-  const vms = Math.round(2 + Math.random()*5);
-  const vmsMax = 8;
-  setGauge("gaugeCpu", "valCpu", cpu);
-  setGauge("gaugeMem", "valMem", mem);
-  setGauge("gaugeDisk", "valDisk", disk);
-  setGaugeRing("gaugeVms", Math.round(vms / vmsMax * 100));
-  const vmsVal = document.getElementById("valVms");
-  countUp(vmsVal, Number(vmsVal.dataset.last || 0), vms, 500, "");
-  vmsVal.dataset.last = vms;
-
-  if (telemetryBadge){
-    telemetryBadge.textContent = "Updated just now";
-    telemetryBadge.classList.add("good");
-    clearTimeout(refreshTelemetry._t);
-    refreshTelemetry._t = setTimeout(() => { telemetryBadge.textContent = "Live Snapshot"; }, 2200);
-  }
-}
 
 runCheckBtn.addEventListener("click", () => {
   const original = runCheckBtn.textContent;
   runCheckBtn.disabled = true;
   runCheckBtn.textContent = "Refreshing…";
-  refreshTelemetry();
   setTimeout(() => {
     runCheckBtn.disabled = false;
     runCheckBtn.textContent = original;
   }, 650);
 });
 
-// Pull an initial reading once things settle on load
-setTimeout(refreshTelemetry, 400);
-
 function fakeSubmit(){
   const status = document.getElementById("formStatus");
-  const form = document.querySelector(".form");
   status.textContent = "Sending…";
-  setTimeout(() => {
-    status.innerHTML = `
-      <span class="form-success">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="rgba(53,208,127,.35)" stroke-width="2"></circle>
-          <path class="fs-check" d="M7 12.5l3.2 3.2L17 8.5"></path>
-        </svg>
-        Message sent (demo) — thanks for reaching out! Wire this form up to a backend to make it real.
-      </span>`;
-    if (form) form.reset();
-  }, 700);
+  setTimeout(() => status.textContent = "Message sent (demo). Connect this form to a backend to enable real contact requests.", 700);
 }
 window.fakeSubmit = fakeSubmit;
-
-// --------- Button ripple ----------
-document.querySelectorAll(".btn").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 1.6;
-    const ripple = document.createElement("span");
-    ripple.className = "ripple";
-    ripple.style.width = ripple.style.height = size + "px";
-    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
-    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
-    btn.appendChild(ripple);
-    ripple.addEventListener("animationend", () => ripple.remove());
-  });
-});
-
-// --------- Cursor-tracked spotlight ----------
-const spotlight = document.getElementById("spotlight");
-if (spotlight && window.matchMedia && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-  let spotlightRaf = null;
-  window.addEventListener("pointermove", (e) => {
-    if (spotlightRaf) return;
-    spotlightRaf = requestAnimationFrame(() => {
-      spotlight.style.setProperty("--mx", e.clientX + "px");
-      spotlight.style.setProperty("--my", e.clientY + "px");
-      spotlight.classList.add("active");
-      spotlightRaf = null;
-    });
-  });
-  window.addEventListener("pointerleave", () => spotlight.classList.remove("active"));
-}
-
-// --------- Card cursor-glow ----------
-document.querySelectorAll(".card").forEach(card => {
-  card.addEventListener("pointermove", (e) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty("--cx", (e.clientX - rect.left) + "px");
-    card.style.setProperty("--cy", (e.clientY - rect.top) + "px");
-  });
-});
 
 // --------- Shooting stars background (subtle, smooth) ----------
 const canvas = document.getElementById("stars");
