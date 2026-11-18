@@ -4,362 +4,410 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="dark" />
-  <title>Lance Nelson — Server Administration Portfolio</title>
+  <meta name="description" content="Lance Nelson — CompTIA A+ and Security+ certified Server Administrator. Home labs, Linux, virtualization, VoIP, and Python automation." />
+  <title>Lance Nelson — Server Administrator</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="stars" aria-hidden="true"></canvas>
-  <div class="grid-overlay" aria-hidden="true"></div>
-  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <canvas id="blackhole" aria-hidden="true"></canvas>
 
-  <div class="app">
-    <aside>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>Lance Nelson</h1>
-          <p>Server Administrator • Neumont University</p>
-        </div>
-      </div>
-
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Lance Nelson</span>
+      </a>
       <nav aria-label="Primary">
-        <div class="nav-indicator" id="navIndicator" aria-hidden="true"></div>
-        <button class="nav-btn" data-target="projects" aria-current="page">
-          <span class="nav-ico" aria-hidden="true">🧩</span>
-          <span class="nav-text"><strong>Projects</strong><span>Builds & labs</span></span>
-        </button>
-        <button class="nav-btn" data-target="skills">
-          <span class="nav-ico" aria-hidden="true">🛠️</span>
-          <span class="nav-text"><strong>Skills</strong><span>Tools & strengths</span></span>
-        </button>
-        <button class="nav-btn" data-target="experience">
-          <span class="nav-ico" aria-hidden="true">📌</span>
-          <span class="nav-text"><strong>Experience</strong><span>Education & certs</span></span>
-        </button>
-        <button class="nav-btn" data-target="contact">
-          <span class="nav-ico" aria-hidden="true">✉️</span>
-          <span class="nav-text"><strong>Contact</strong><span>Get in touch</span></span>
-        </button>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
       </nav>
+      <a class="btn btn-small btn-primary nav-cta" data-link="resume" target="_blank" rel="noopener">Resume</a>
+    </div>
+  </header>
 
-      <div class="sidebar-footer">
-        <div class="status-pill" role="status" aria-live="polite">
-          <div class="status-left">
-            <span class="dot" aria-hidden="true"></span>
-            <div>
-              <strong>Available for opportunities</strong>
-              <small class="mono" id="uptimeText">Session: 00:00:00</small>
-            </div>
-          </div>
-          <span class="badge good">ONLINE</span>
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow mono"><span class="pulse" aria-hidden="true"></span> Available for internships &amp; entry-level roles</p>
+        <h1>Lance<br/><span class="grad">Nelson</span></h1>
+        <p class="hero-role">Server Administrator</p>
+        <p class="hero-sub">
+          CompTIA A+ and Security+ certified. I build home lab environments, deploy and secure Linux servers,
+          and automate the boring parts with Python.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn" href="#contact">Get in touch</a>
         </div>
-
-        <button class="btn" id="toggleStars" type="button" aria-pressed="true">
-          Toggle Background FX
-        </button>
+        <ul class="hero-tags mono" aria-label="Highlights">
+          <li>CompTIA A+</li>
+          <li>Security+</li>
+          <li>Linux</li>
+          <li>Proxmox</li>
+          <li>Windows Server</li>
+          <li>Splunk</li>
+          <li>Neumont '27</li>
+        </ul>
       </div>
-    </aside>
+      <a class="scroll-hint mono" href="#about" aria-label="Scroll to About">scroll ↓</a>
+    </section>
 
-    <main>
-      <header>
-        <div class="title">
-          <h2 id="pageTitle">Projects</h2>
-          <p id="pageDesc">
-            CompTIA A+ and Security+ certified Server Administrator with home lab experience, Python skills, and foundational networking.
-          </p>
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num mono">01</span>
+          <h2>About</h2>
         </div>
-        <div class="toolbar">
-          <div class="chip"><span aria-hidden="true">🕒</span><span class="mono" id="clock">--:--:--</span></div>
-          <div class="chip"><span aria-hidden="true">🧾</span><span>A+ • Security+</span></div>
-          <button class="btn primary" type="button" id="runCheck">Refresh Demo Data</button>
+        <div class="about-grid">
+          <div class="panel reveal">
+            <p class="lead">
+              I'm a student at <strong>Neumont University</strong>, graduating in <strong>September 2027</strong>
+              with my bachelor's degree, and I'm already certified in <strong>CompTIA A+</strong> and <strong>Security+</strong>.
+            </p>
+            <p>
+              Most of what I know comes from building things myself in my home lab. I spin up servers, configure services,
+              break them and fix them again. I care about stable systems, clean documentation, and using automation
+              to cut down on manual mistakes.
+            </p>
+          </div>
+          <div class="stats reveal">
+            <div class="stat"><strong>2</strong><span>CompTIA certifications</span></div>
+            <div class="stat"><strong>11</strong><span>Lab projects completed</span></div>
+            <div class="stat"><strong>2027</strong><span>B.S. graduation, Neumont</span></div>
+          </div>
         </div>
-      </header>
-
-      <div class="content">
-
-        <!-- PROJECTS -->
-        <section id="projects">
-          <div class="grid">
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>
-                Technical Projects
-                <span class="badge good">Hands-On Portfolio</span>
-              </h3>
-              <p class="meta">
-                I build and maintain home lab environments to practice real server administration, security, and networking workflows.
-                Below are a few example projects I've done in the past.
-              </p>
-            </div>
-
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>
-                Home Lab Telemetry
-                <span class="badge" id="telemetryBadge">Live Snapshot</span>
-              </h3>
-              <p class="meta">Hit "Refresh Demo Data" up top to pull a new reading from the lab.</p>
-              <div class="telemetry" id="telemetry">
-                <div class="gauge">
-                  <svg width="52" height="52" viewBox="0 0 52 52">
-                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
-                    <circle class="gauge-ring" id="gaugeCpu" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
-                  </svg>
-                  <div class="gauge-info"><strong id="valCpu">0%</strong><span>CPU · hv1</span></div>
-                </div>
-                <div class="gauge">
-                  <svg width="52" height="52" viewBox="0 0 52 52">
-                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
-                    <circle class="gauge-ring" id="gaugeMem" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
-                  </svg>
-                  <div class="gauge-info"><strong id="valMem">0%</strong><span>Memory · hv1</span></div>
-                </div>
-                <div class="gauge">
-                  <svg width="52" height="52" viewBox="0 0 52 52">
-                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
-                    <circle class="gauge-ring" id="gaugeDisk" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
-                  </svg>
-                  <div class="gauge-info"><strong id="valDisk">0%</strong><span>Disk · /var</span></div>
-                </div>
-                <div class="gauge">
-                  <svg width="52" height="52" viewBox="0 0 52 52">
-                    <circle class="gauge-ring-bg" cx="26" cy="26" r="21"></circle>
-                    <circle class="gauge-ring" id="gaugeVms" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
-                  </svg>
-                  <div class="gauge-info"><strong id="valVms">0</strong><span>VMs Online</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Multi-Disk Linux Server Deployment <span class="badge good">Rocky Linux</span></h3>
-              <p class="meta">
-                Deployed Rocky Linux using a multi-disk layout with <span class="mono">/var</span> on a separate drive to improve
-                logging isolation and organization. Verified the final layout using <span class="mono">df</span>.
-              </p>
-              <p class="meta" style="margin-top:10px;">
-                Tools: <span class="mono">Rocky Linux</span>, partitioning, CLI
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Virtualized Home Lab Environment <span class="badge good">VMware / VirtualBox</span></h3>
-              <p class="meta">
-                Built multiple VMs for server testing and created isolated networks to safely simulate real environments.
-                Practiced troubleshooting, IP setup, and service connectivity.
-              </p>
-              <p class="meta" style="margin-top:10px;">
-                Tools: <span class="mono">VMware</span>, <span class="mono">VirtualBox</span>, host-only networking
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>PBX / VoIP Server Lab <span class="badge warn">In Progress</span></h3>
-              <p class="meta">
-                Installed and configured a PBX environment with voicemail and basic call routing.
-                Focused on stability, documentation, and repeatable setup steps.
-              </p>
-              <p class="meta" style="margin-top:10px;">
-                Tools: <span class="mono">FreePBX / 3CX</span>, admin docs
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Python Automation Utilities <span class="badge">Scripting</span></h3>
-              <p class="meta">
-                Wrote Python scripts to automate repetitive admin tasks and support monitoring/log review.
-                I enjoy using automation to save time and reduce mistakes.
-              </p>
-              <p class="meta" style="margin-top:10px;">
-                Tools: <span class="mono">Python</span>, parsing, basic monitoring
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- SKILLS -->
-        <section id="skills" hidden>
-          <div class="grid">
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>
-                Skills
-                <span class="badge">Server Admin Focus</span>
-              </h3>
-              <p class="meta">
-                Strong fundamentals across server administration, security, scripting, and networking built through certifications and hands on home lab practice.
-              </p>
-            </div>
-
-            <div class="card span-12" id="skillMeterCard"><span class="card-scan" aria-hidden="true"></span>
-              <h3>
-                Proficiency
-                <span class="badge good">Self-Rated</span>
-              </h3>
-              <div class="skill-meter" data-percent="88">
-                <div class="skill-meter-head"><strong>Linux Administration</strong><span class="mono skill-meter-val">0%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
-              </div>
-              <div class="skill-meter" data-percent="70">
-                <div class="skill-meter-head"><strong>Python / Automation</strong><span class="mono skill-meter-val">0%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
-              </div>
-              <div class="skill-meter" data-percent="82">
-                <div class="skill-meter-head"><strong>Virtualization (VMware / VirtualBox)</strong><span class="mono skill-meter-val">0%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
-              </div>
-              <div class="skill-meter" data-percent="75">
-                <div class="skill-meter-head"><strong>Security Fundamentals</strong><span class="mono skill-meter-val">0%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
-              </div>
-              <div class="skill-meter" data-percent="60">
-                <div class="skill-meter-head"><strong>Networking Foundations</strong><span class="mono skill-meter-val">0%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill"></div></div>
-              </div>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Operating Systems</h3>
-              <p class="meta">
-                • Linux (Rocky, Ubuntu)<br/>
-                • Windows environments<br/>
-                • Users, groups, permissions<br/>
-                • Service management and configuration
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Virtualization & Lab Work</h3>
-              <p class="meta">
-                • VMware / VirtualBox<br/>
-                • VM provisioning and snapshots<br/>
-                • Isolated virtual networks<br/>
-                • Troubleshooting lab environments
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Security</h3>
-              <p class="meta">
-                • CompTIA Security+ certified<br/>
-                • Access control fundamentals<br/>
-                • Patch management mindset<br/>
-                • Secure configuration basics
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Python & Automation</h3>
-              <p class="meta">
-                • Python scripting for admin tasks<br/>
-                • Log parsing and simple tooling<br/>
-                • Clean, readable code style<br/>
-                • Automation to reduce manual errors
-              </p>
-            </div>
-
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Networking (Foundations)</h3>
-              <p class="meta">
-                • IP addressing and subnetting basics<br/>
-                • Host-only / isolated networking in labs<br/>
-                • Connectivity troubleshooting (ping, DNS basics)<br/>
-                • Understanding how services communicate
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- EXPERIENCE -->
-        <section id="experience" hidden>
-          <div class="grid">
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Experience</h3>
-              <p class="meta">
-                I’m Lance Nelson, a CompTIA A+ and Security+ certified Server Administrator and a student at Neumont University.
-                I graduate in September 2027 with my bachelor’s degree. I enjoy building home lab environments, working with servers,
-                automating tasks with Python, and strengthening my networking skills.
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Certifications</h3>
-              <p class="meta">
-                • CompTIA A+<br/>
-                • CompTIA Security+<br/>
-              </p>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Education</h3>
-              <p class="meta">
-                Neumont University<br/>
-                Bachelor’s Degree — Expected September 2027
-              </p>
-            </div>
-
-            <div class="card span-12"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Home Lab Focus</h3>
-              <p class="meta">
-                • Building multi-VM server environments<br/>
-                • Testing services, permissions, and configurations<br/>
-                • Practicing backups, updates, and stability habits<br/>
-                • Learning by breaking things safely and fixing them
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- CONTACT -->
-        <section id="contact" hidden>
-          <div class="grid">
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Contact</h3>
-              <p class="meta">
-                Want to connect about internships, entry level roles, or projects? Send a message below.
-              </p>
-
-              <form class="form" onsubmit="event.preventDefault(); fakeSubmit();">
-                <label>
-                  Name
-                  <input name="name" autocomplete="name" placeholder="Your name" required />
-                </label>
-                <label>
-                  Email
-                  <input name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
-                </label>
-                <label>
-                  Message
-                  <textarea name="message" placeholder="How can we work together?" required></textarea>
-                </label>
-                <button class="btn primary" type="submit">Send Message</button>
-                <p class="meta" id="formStatus" role="status" aria-live="polite" style="margin:0;"></p>
-              </form>
-            </div>
-
-            <div class="card span-6"><span class="card-scan" aria-hidden="true"></span>
-              <h3>Quick Info</h3>
-              <p class="meta">
-                Name: <span class="mono">Lance Nelson</span><br/>
-                Focus: <span class="mono">Server Administration</span><br/>
-                Certifications: <span class="mono">CompTIA A+ • Security+</span><br/>
-                School: <span class="mono">Neumont University</span><br/>
-                Graduation: <span class="mono">September 2027</span>
-              </p>
-
-              <div class="kpis" style="margin-top:14px">
-                <div class="kpi"><strong class="mono">Linux</strong><span>Admin skills</span></div>
-                <div class="kpi"><strong class="mono">Python</strong><span>Automation</span></div>
-                <div class="kpi"><strong class="mono">Labs</strong><span>Hands-on practice</span></div>
-              </div>
-
-              <p class="meta" style="margin-top:12px">
-              </p>
-            </div>
-          </div>
-        </section>
-
       </div>
-    </main>
-  </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num mono">02</span>
+          <h2>Projects</h2>
+          <p>Real builds from my home lab and coursework. Click any screenshot to enlarge it.</p>
+        </div>
+
+        <div class="projects">
+
+          <!-- Featured -->
+          <article class="project project-featured reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 01 · featured</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <h3>Proxmox High-Availability Cluster</h3>
+            <p>
+              Built a two-node Proxmox VE cluster (<code>LNelson-hv1</code> + <code>lnelson-hv2</code>) with working quorum and
+              HA management. I connected shared storage from a Synology NAS over iSCSI and NFS, set up Linux network bridges
+              with VLAN tagging, built VM templates for fast full-clone deployments, and ran services in LXC containers.
+              I also handled repository configuration and system upgrades on both nodes.
+            </p>
+            <div class="shots shots-3">
+              <figure class="shot"><img src="images/proxmox-quorum.png" alt="pvecm membership showing both nodes and ha-manager status reporting quorum OK" loading="lazy" /><figcaption>Cluster membership: quorum OK</figcaption></figure>
+              <figure class="shot"><img src="images/proxmox-cluster.png" alt="Proxmox datacenter view of lnelson-cluster with two nodes" loading="lazy" /><figcaption>Datacenter view</figcaption></figure>
+              <figure class="shot"><img src="images/proxmox-clone.png" alt="Cloning a VM from template 101 as a full clone" loading="lazy" /><figcaption>Full clone from a VM template</figcaption></figure>
+            </div>
+            <ul class="tools mono"><li>Proxmox VE</li><li>Clustering / HA</li><li>iSCSI</li><li>NFS</li><li>Synology</li><li>VLANs</li><li>LXC</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 02</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/splunk-search.png" alt="Splunk search showing 1,942 Windows System events collected in 24 hours" loading="lazy" /><figcaption>1,942 Windows events indexed in 24 hours</figcaption></figure>
+            <h3>Splunk Log Monitoring (SIEM)</h3>
+            <p>
+              Deployed Splunk Enterprise and installed the Universal Forwarder on a Windows file server to ship its
+              event logs. Then I searched and broke down the data by host, source, and event code to watch
+              what was happening across the domain.
+            </p>
+            <ul class="tools mono"><li>Splunk Enterprise</li><li>Universal Forwarder</li><li>Windows Event Logs</li><li>SPL</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 03</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/veeam.png" alt="Veeam Backup and Replication console showing successful jobs in the last 24 hours" loading="lazy" /><figcaption>Backup jobs completing successfully</figcaption></figure>
+            <h3>Veeam Backup &amp; Replication</h3>
+            <p>
+              Installed Veeam Backup &amp; Replication in my Windows Server domain, configured backup jobs for
+              domain servers, and confirmed they completed successfully. Backups you've actually tested are
+              what make recovery possible.
+            </p>
+            <ul class="tools mono"><li>Veeam B&amp;R</li><li>Windows Server</li><li>Backup &amp; recovery</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 04</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/windows-dns.png" alt="Windows DNS Manager showing the ninjas.local zone with host records" loading="lazy" /><figcaption>Windows DNS forward lookup zone</figcaption></figure>
+            <h3>Windows Server Infrastructure</h3>
+            <p>
+              Stood up Windows Server 2025 machines for a lab domain: a DNS server with forward lookup zones for my
+              hypervisors, a file server, and Hyper-V. I configured static IPs, joined machines to the domain,
+              and connected iSCSI storage.
+            </p>
+            <ul class="tools mono"><li>Windows Server 2025</li><li>DNS</li><li>Hyper-V</li><li>iSCSI</li><li>PowerShell</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 05</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/bind-zone.png" alt="BIND zone file for neumont.edu on Rocky Linux" loading="lazy" /><figcaption>Hand-written BIND zone file</figcaption></figure>
+            <h3>BIND DNS Server on Rocky Linux</h3>
+            <p>
+              Configured BIND (<code>named</code>) on Rocky Linux and wrote the zone files by hand, with SOA, NS and A records.
+              I set up zone transfers to a Windows DNS secondary server and checked resolution with <code>dig</code> and <code>nslookup</code>.
+            </p>
+            <ul class="tools mono"><li>BIND / named</li><li>Rocky Linux</li><li>Zone transfers</li><li>dig</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 06</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/apache-https.png" alt="Rocky Linux web server page served by Apache over HTTPS" loading="lazy" /><figcaption>Apache serving over HTTPS</figcaption></figure>
+            <h3>Linux &amp; Windows Web Servers</h3>
+            <p>
+              Hosted sites on Apache with HTTPS and name-based virtual hosts, ran nginx serving several sites on
+              different ports, deployed a PHP + MariaDB web app, and set up IIS on Windows Server. I also opened
+              only the ports each site needed in the firewall.
+            </p>
+            <ul class="tools mono"><li>Apache</li><li>nginx</li><li>IIS</li><li>TLS</li><li>MariaDB</li><li>firewalld</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 07</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/tripwire.png" alt="Initializing the Tripwire file integrity database on Kali Linux" loading="lazy" /><figcaption>Tripwire file-integrity baseline</figcaption></figure>
+            <h3>Linux Security Hardening</h3>
+            <p>
+              Locked down SSH with key-only logins and multi-factor authentication, wrote nftables firewall rules,
+              centralized logs with rsyslog, set up Tripwire file-integrity checks, and encrypted files with GPG.
+              I also ran vulnerability and port scans with Nessus and nmap.
+            </p>
+            <ul class="tools mono"><li>SSH keys + MFA</li><li>nftables</li><li>rsyslog</li><li>Tripwire</li><li>Nessus</li><li>nmap</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 08</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <figure class="shot"><img src="images/virtualbox-vms.png" alt="VirtualBox manager listing web, file, Alpine Linux and Rocky Linux VMs" loading="lazy" /><figcaption>Lab VMs in VirtualBox</figcaption></figure>
+            <h3>Virtualized Home Lab</h3>
+            <p>
+              My everyday lab: multiple VMs (web, file, Alpine, Rocky) on isolated host-only and NAT networks, where
+              I practice troubleshooting, IP setup, and service connectivity. This includes a multi-disk Rocky Linux
+              build with <code>/var</code> on its own drive to keep logs separate.
+            </p>
+            <ul class="tools mono"><li>VirtualBox</li><li>VMware</li><li>Rocky / Alpine</li><li>Host-only networking</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 09</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <h3>PBX / VoIP Server</h3>
+            <p>
+              Installed and configured a full PBX phone system with voicemail and call routing, and wrote
+              setup documentation so the build can be redeployed from scratch.
+            </p>
+            <ul class="tools mono"><li>FreePBX / 3CX</li><li>VoIP</li><li>Call routing</li><li>Documentation</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 10</span>
+              <span class="tag tag-done">Completed</span>
+            </div>
+            <h3>Wireless Site Survey</h3>
+            <p>
+              Surveyed Wi-Fi coverage across several campus floors with Ekahau. I walked the floor plans, produced
+              signal-strength heatmaps, and mapped the access points and channels in use.
+            </p>
+            <ul class="tools mono"><li>Ekahau</li><li>Wi-Fi heatmaps</li><li>RF / channels</li></ul>
+          </article>
+
+          <article class="project reveal">
+            <div class="project-top">
+              <span class="project-num mono">// 11</span>
+              <span class="tag">Scripting</span>
+            </div>
+            <h3>Python Automation Utilities</h3>
+            <p>
+              Python scripts that automate repetitive admin tasks and help with monitoring and log review,
+              saving time and cutting down on manual mistakes.
+            </p>
+            <ul class="tools mono"><li>Python</li><li>Log parsing</li><li>Monitoring</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num mono">03</span>
+          <h2>Skills</h2>
+          <p>Tools I've actually deployed and configured, not just read about.</p>
+        </div>
+
+        <div class="skills">
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">⌘</span> Operating Systems</h3>
+            <ul><li>Linux: Rocky, Ubuntu, Debian, Alpine, Kali</li><li>Windows Server 2025</li><li>Users, groups &amp; permissions</li><li>systemd service management</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">▣</span> Virtualization</h3>
+            <ul><li>Proxmox VE clustering &amp; HA</li><li>Hyper-V, VMware, VirtualBox</li><li>VM templates &amp; LXC containers</li><li>iSCSI &amp; NFS shared storage</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">⊞</span> Windows Infrastructure</h3>
+            <ul><li>Windows Server domain setup</li><li>DNS Manager &amp; zones</li><li>File server &amp; iSCSI</li><li>PowerShell administration</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">⇄</span> Networking &amp; DNS</h3>
+            <ul><li>BIND &amp; Windows DNS, zone transfers</li><li>VLANs &amp; Linux bridges</li><li>IP addressing &amp; subnetting</li><li>dig, nslookup, ping, traceroute</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">◈</span> Security</h3>
+            <ul><li>CompTIA Security+ certified</li><li>SSH hardening &amp; MFA</li><li>nftables / firewalld</li><li>Nessus, nmap, Tripwire, GPG</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">◎</span> Monitoring &amp; Backup</h3>
+            <ul><li>Splunk Enterprise + forwarders</li><li>rsyslog centralized logging</li><li>Windows Event Logs &amp; Sysmon</li><li>Veeam Backup &amp; Replication</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">◇</span> Web Services</h3>
+            <ul><li>Apache virtual hosts</li><li>nginx &amp; IIS</li><li>HTTPS / TLS certificates</li><li>MariaDB + PHP apps</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">❯</span> Scripting</h3>
+            <ul><li>Python automation</li><li>PowerShell</li><li>Bash</li><li>Log parsing &amp; tooling</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3><span class="skill-ico" aria-hidden="true">☎</span> VoIP &amp; Wireless</h3>
+            <ul><li>PBX installation &amp; setup</li><li>Voicemail &amp; call routing</li><li>Ekahau Wi-Fi surveys</li><li>Coverage heatmaps</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num mono">04</span>
+          <h2>Experience</h2>
+          <p>Education, certifications, and ongoing lab work.</p>
+        </div>
+
+        <ol class="timeline">
+          <li class="reveal">
+            <span class="when mono">Expected Sept 2027</span>
+            <h3>Bachelor's Degree</h3>
+            <p>Neumont University</p>
+          </li>
+          <li class="reveal">
+            <span class="when mono">Certified</span>
+            <h3>CompTIA Security+</h3>
+            <p>Security concepts, access control, threats, and secure configuration.</p>
+          </li>
+          <li class="reveal">
+            <span class="when mono">Certified</span>
+            <h3>CompTIA A+</h3>
+            <p>Hardware, operating systems, troubleshooting, and IT support fundamentals.</p>
+          </li>
+          <li class="reveal">
+            <span class="when mono">Ongoing</span>
+            <h3>Home Lab</h3>
+            <p>Running a Proxmox cluster, a Windows Server domain, and Linux servers. I practice monitoring, backups, hardening, and upgrades on real systems.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num mono">05</span>
+          <h2>Contact</h2>
+          <p>Want to talk about an internship, an entry-level role, or a project? I'd love to hear from you.</p>
+        </div>
+
+        <div class="contact-grid">
+          <form class="panel form reveal" id="contactForm">
+            <label>Name
+              <input name="name" autocomplete="name" placeholder="Your name" required />
+            </label>
+            <label>Email
+              <input name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            </label>
+            <label>Message
+              <textarea name="message" placeholder="How can we work together?" required></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Send message</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="panel reveal">
+            <dl class="info">
+              <div><dt>Focus</dt><dd>Server Administration</dd></div>
+              <div><dt>Certs</dt><dd>CompTIA A+ · Security+</dd></div>
+              <div><dt>School</dt><dd>Neumont University</dd></div>
+              <div><dt>Graduation</dt><dd>September 2027</dd></div>
+            </dl>
+            <div class="links">
+              <a class="btn" data-link="linkedin" target="_blank" rel="noopener">LinkedIn ↗</a>
+              <a class="btn" data-link="github" target="_blank" rel="noopener">GitHub ↗</a>
+              <a class="btn" data-link="resume" target="_blank" rel="noopener">Resume ↗</a>
+              <a class="btn" data-link="email">Email</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Lance Nelson</span>
+      <button class="link-btn mono" id="toggleFx" type="button" aria-pressed="true">Pause black hole</button>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot preview">
+    <button class="lightbox-close" type="button" aria-label="Close">✕</button>
+    <img alt="" />
+    <p class="lightbox-caption mono"></p>
+  </dialog>
 
   <script src="script.js"></script>
 </body>

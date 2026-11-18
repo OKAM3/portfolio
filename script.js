@@ -1,362 +1,322 @@
-// --------- Single-page navigation ----------
-const sections = ["projects", "skills", "experience", "contact"];
-const titles = {
-  projects: ["Projects", "Hands-on server administration projects and home lab builds."],
-  skills: ["Skills", "Operating systems, virtualization, security, scripting, and networking fundamentals."],
-  experience: ["Experience", "Certifications, education, and the work that supports real sysadmin workflows."],
-  contact: ["Contact", "Reach out for internships, job opportunities, or collaboration."]
+document.documentElement.classList.add("js");
+
+// =====================================================================
+//  YOUR LINKS: fill these in
+//  Any link left as "" is hidden automatically, so nothing broken shows.
+// =====================================================================
+const LINKS = {
+  linkedin: "https://www.linkedin.com/in/lance-nelson-578a84368/",
+  github:   "https://github.com/OKAM3",
+  resume:   "",   // e.g. "resume.pdf" (put the PDF in this folder)
+  email:    "nlance225026@gmail.com"
 };
 
-const navButtons = [...document.querySelectorAll(".nav-btn")];
-const pageTitle = document.getElementById("pageTitle");
-const pageDesc = document.getElementById("pageDesc");
-const navIndicator = document.getElementById("navIndicator");
-
-function moveNavIndicator(btn){
-  if (!navIndicator || !btn) return;
-  const navRect = btn.parentElement.getBoundingClientRect();
-  const r = btn.getBoundingClientRect();
-  navIndicator.style.opacity = "1";
-  navIndicator.style.height = r.height + "px";
-  navIndicator.style.transform = `translateY(${r.top - navRect.top}px)`;
-}
-
-function showSection(id){
-  sections.forEach(s => {
-    const el = document.getElementById(s);
-    el.hidden = (s !== id);
-  });
-  navButtons.forEach(b => b.setAttribute("aria-current", b.dataset.target === id ? "page" : "false"));
-  pageTitle.textContent = titles[id][0];
-  pageDesc.textContent = titles[id][1];
-  history.replaceState(null, "", "#" + id);
-
-  const activeBtn = navButtons.find(b => b.dataset.target === id);
-  moveNavIndicator(activeBtn);
-
-  // Stagger-in the cards for the newly visible section
-  const grid = document.querySelector(`#${id} .grid`);
-  if (grid){
-    grid.classList.remove("entering");
-    // force reflow so the animation replays every time
-    void grid.offsetWidth;
-    grid.classList.add("entering");
-  }
-
-  // Animate skill meters into view the first time Skills is shown
-  if (id === "skills") animateSkillMeters();
-}
-
-navButtons.forEach(btn => {
-  btn.addEventListener("click", () => showSection(btn.dataset.target));
+document.querySelectorAll("[data-link]").forEach(el => {
+  const key = el.dataset.link;
+  const value = LINKS[key];
+  if (!value) { el.hidden = true; return; }
+  el.href = key === "email" ? "mailto:" + value : value;
+});
+document.querySelectorAll(".links").forEach(box => {
+  if (![...box.children].some(c => !c.hidden)) box.hidden = true;
 });
 
-// On load, respect hash
-const hash = (location.hash || "#projects").replace("#","");
-showSection(sections.includes(hash) ? hash : "projects");
-window.addEventListener("resize", () => {
-  const activeBtn = navButtons.find(b => b.getAttribute("aria-current") === "page");
-  moveNavIndicator(activeBtn);
+// ---------- Contact form: opens the visitor's email app, pre-filled ----------
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+if (!LINKS.email) contactForm.hidden = true; // no form that goes nowhere
+
+contactForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const data = new FormData(contactForm);
+  const subject = `Portfolio contact from ${data.get("name")}`;
+  const body = `${data.get("message")}\n\n— ${data.get("name")} (${data.get("email")})`;
+  window.location.href =
+    `mailto:${LINKS.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  formStatus.textContent = "Opening your email app… if nothing happens, email me at " + LINKS.email;
 });
 
-// --------- Skill meters ----------
-let skillsAnimated = false;
-function animateSkillMeters(){
-  if (skillsAnimated) return;
-  skillsAnimated = true;
-  document.querySelectorAll(".skill-meter").forEach((meter, i) => {
-    const pct = Number(meter.dataset.percent || 0);
-    const fill = meter.querySelector(".skill-meter-fill");
-    const val = meter.querySelector(".skill-meter-val");
-    setTimeout(() => {
-      fill.style.width = pct + "%";
-      countUp(val, 0, pct, 700, "%");
-    }, i * 110);
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// ---------- Scroll reveal ----------
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting){ en.target.classList.add("in"); revealObs.unobserve(en.target); }
   });
-}
+}, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
 
-function countUp(el, from, to, duration, suffix=""){
-  const start = performance.now();
-  function frame(now){
-    const p = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    const current = Math.round(from + (to - from) * eased);
-    el.textContent = current + suffix;
-    if (p < 1) requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-}
+// ---------- Active nav link ----------
+const navLinks = [...document.querySelectorAll(".nav nav a")];
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting){
+      navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id));
+    }
+  });
+}, { rootMargin: "-45% 0px -50% 0px" });
+document.querySelectorAll("main section[id]").forEach(s => navObs.observe(s));
 
-// --------- Clock + "session" timer ----------
-const clock = document.getElementById("clock");
-const uptimeText = document.getElementById("uptimeText");
-const start = Date.now();
-
-function tick(){
-  const now = new Date();
-  clock.textContent = now.toLocaleTimeString([], {hour12:false});
-  const elapsed = Math.floor((Date.now() - start)/1000);
-  const h = String(Math.floor(elapsed/3600)).padStart(2,"0");
-  const m = String(Math.floor((elapsed%3600)/60)).padStart(2,"0");
-  const s = String(elapsed%60).padStart(2,"0");
-  uptimeText.textContent = `Session: ${h}:${m}:${s}`;
-  requestAnimationFrame(() => setTimeout(tick, 250));
-}
-tick();
-
-// --------- Demo interactions ----------
-const runCheckBtn = document.getElementById("runCheck");
-const telemetryBadge = document.getElementById("telemetryBadge");
-
-const GAUGE_CIRC = 131.9; // 2 * PI * r(21)
-function setGaugeRing(ringId, pct){
-  const ring = document.getElementById(ringId);
-  if (!ring) return;
-  ring.style.strokeDashoffset = String(GAUGE_CIRC * (1 - pct / 100));
-}
-function setGauge(ringId, valId, pct, suffix="%"){
-  setGaugeRing(ringId, pct);
-  const val = document.getElementById(valId);
-  if (!val) return;
-  countUp(val, Number(val.dataset.last || 0), pct, 700, suffix);
-  val.dataset.last = pct;
-}
-
-function refreshTelemetry(){
-  const cpu = Math.round(20 + Math.random()*55);
-  const mem = Math.round(30 + Math.random()*45);
-  const disk = Math.round(35 + Math.random()*40);
-  const vms = Math.round(2 + Math.random()*5);
-  const vmsMax = 8;
-  setGauge("gaugeCpu", "valCpu", cpu);
-  setGauge("gaugeMem", "valMem", mem);
-  setGauge("gaugeDisk", "valDisk", disk);
-  setGaugeRing("gaugeVms", Math.round(vms / vmsMax * 100));
-  const vmsVal = document.getElementById("valVms");
-  countUp(vmsVal, Number(vmsVal.dataset.last || 0), vms, 500, "");
-  vmsVal.dataset.last = vms;
-
-  if (telemetryBadge){
-    telemetryBadge.textContent = "Updated just now";
-    telemetryBadge.classList.add("good");
-    clearTimeout(refreshTelemetry._t);
-    refreshTelemetry._t = setTimeout(() => { telemetryBadge.textContent = "Live Snapshot"; }, 2200);
-  }
-}
-
-runCheckBtn.addEventListener("click", () => {
-  const original = runCheckBtn.textContent;
-  runCheckBtn.disabled = true;
-  runCheckBtn.textContent = "Refreshing…";
-  refreshTelemetry();
-  setTimeout(() => {
-    runCheckBtn.disabled = false;
-    runCheckBtn.textContent = original;
-  }, 650);
-});
-
-// Pull an initial reading once things settle on load
-setTimeout(refreshTelemetry, 400);
-
-function fakeSubmit(){
-  const status = document.getElementById("formStatus");
-  const form = document.querySelector(".form");
-  status.textContent = "Sending…";
-  setTimeout(() => {
-    status.innerHTML = `
-      <span class="form-success">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="rgba(53,208,127,.35)" stroke-width="2"></circle>
-          <path class="fs-check" d="M7 12.5l3.2 3.2L17 8.5"></path>
-        </svg>
-        Message sent (demo) — thanks for reaching out! Wire this form up to a backend to make it real.
-      </span>`;
-    if (form) form.reset();
-  }, 700);
-}
-window.fakeSubmit = fakeSubmit;
-
-// --------- Button ripple ----------
-document.querySelectorAll(".btn").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 1.6;
-    const ripple = document.createElement("span");
-    ripple.className = "ripple";
-    ripple.style.width = ripple.style.height = size + "px";
-    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
-    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
-    btn.appendChild(ripple);
-    ripple.addEventListener("animationend", () => ripple.remove());
+// ---------- Screenshot lightbox ----------
+const lightbox = document.getElementById("lightbox");
+const lbImg = lightbox.querySelector("img");
+const lbCap = lightbox.querySelector(".lightbox-caption");
+document.querySelectorAll(".shot img").forEach(img => {
+  img.closest(".shot").addEventListener("click", () => {
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCap.textContent = img.closest(".shot").querySelector("figcaption")?.textContent || img.alt;
+    lightbox.showModal();
   });
 });
+lightbox.querySelector(".lightbox-close").addEventListener("click", () => lightbox.close());
+lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.close(); });
 
-// --------- Cursor-tracked spotlight ----------
-const spotlight = document.getElementById("spotlight");
-if (spotlight && window.matchMedia && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-  let spotlightRaf = null;
-  window.addEventListener("pointermove", (e) => {
-    if (spotlightRaf) return;
-    spotlightRaf = requestAnimationFrame(() => {
-      spotlight.style.setProperty("--mx", e.clientX + "px");
-      spotlight.style.setProperty("--my", e.clientY + "px");
-      spotlight.classList.add("active");
-      spotlightRaf = null;
-    });
-  });
-  window.addEventListener("pointerleave", () => spotlight.classList.remove("active"));
-}
-
-// --------- Card cursor-glow ----------
-document.querySelectorAll(".card").forEach(card => {
+// ---------- Project card glow follows the mouse ----------
+document.querySelectorAll(".project").forEach(card => {
   card.addEventListener("pointermove", (e) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty("--cx", (e.clientX - rect.left) + "px");
-    card.style.setProperty("--cy", (e.clientY - rect.top) + "px");
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    card.style.setProperty("--my", (e.clientY - r.top) + "px");
   });
 });
 
-// --------- Shooting stars background (subtle, smooth) ----------
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d", { alpha: true });
-let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+// =====================================================================
+//  PURPLE BLACK HOLE
+//  Layers (back to front): starfield → far side of the accretion disk →
+//  lensed halo (far disk bent over the top) → event horizon (shadow) →
+//  photon ring → near side of the disk crossing in front.
+// =====================================================================
+const starCanvas = document.getElementById("starfield");
+const sctx = starCanvas.getContext("2d");
+const canvas = document.getElementById("blackhole");
+const ctx = canvas.getContext("2d");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function resize(){
-  w = canvas.width = Math.floor(window.innerWidth * dpr);
-  h = canvas.height = Math.floor(window.innerHeight * dpr);
-  canvas.style.width = window.innerWidth + "px";
-  canvas.style.height = window.innerHeight + "px";
-}
-window.addEventListener("resize", resize);
-resize();
+let W = 0, H = 0, DPR = 1;
+let cx = 0, cy = 0, rh = 0;          // center + event-horizon radius
+let mouseX = 0, mouseY = 0, offX = 0, offY = 0;
+let running = !reduceMotion;
+let particles = [];
 
-const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TILT = 0.2;                    // how edge-on the disk is (0 = edge-on)
+const R_IN = 1.55, R_OUT = 4.6;      // disk radii, in units of horizon radius
 
-const MAX_TRAILS = 8;                 // subtle
-const SPAWN_INTERVAL_MS = 900;        // cadence
-const TRAIL_LEN = 180;                // px
-const BASE_SPEED = 900;               // px/sec
-const ANGLE = Math.PI * (210/180);    // down-left
-const stars = [];
-let lastSpawn = 0;
-let enabled = true;
+// Colour bands from hot inner edge (near white-pink) to cool outer edge (deep violet)
+const BANDS = 10;
+const bandColors = Array.from({ length: BANDS }, (_, i) => {
+  const t = i / (BANDS - 1);
+  const hue = 300 - t * 42;          // 300 (pink-violet) → 258 (deep purple)
+  const sat = 100 - t * 15;
+  const light = 93 - t * 40;
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
+});
 
-function spawnStar(){
-  if (stars.length >= MAX_TRAILS) return;
-
-  // spawn from top/right edges for diagonal travel
-  const fromTop = Math.random() < 0.45;
-  const x = fromTop ? randf(0.55*w, 1.05*w) : randf(0.75*w, 1.10*w);
-  const y = fromTop ? randf(-0.15*h, 0.25*h) : randf(-0.10*h, 0.45*h);
-
-  const speed = (BASE_SPEED * randf(0.65, 1.05)) * dpr;
-  const len = (TRAIL_LEN * randf(0.65, 1.10)) * dpr;
-  const life = randf(0.85, 1.35); // seconds
-  const width = randf(1.0, 1.8) * dpr;
-
-  // soft purple-white
-  const hue = randf(255, 278);
-  const sat = randf(70, 90);
-  const light = randf(65, 88);
-
-  stars.push({
-    x, y,
-    vx: Math.cos(ANGLE) * speed,
-    vy: Math.sin(ANGLE) * speed,
-    len,
-    life,
-    age: 0,
-    width,
-    hue, sat, light,
-    twinkle: randf(0.7, 1.2)
+function makeParticles(){
+  const count = W > 900 ? 3200 : 2000;
+  particles = Array.from({ length: count }, () => {
+    const u = Math.pow(Math.random(), 1.7);      // denser near the inner edge
+    const rn = R_IN + (R_OUT - R_IN) * u;
+    return {
+      rn,
+      a: Math.random() * Math.PI * 2,
+      w: 0.85 * Math.pow(R_IN / rn, 1.5),        // Kepler-ish: inner orbits faster
+      size: (Math.random() * 1.3 + 0.7),
+      alpha: (0.5 + Math.random() * 0.5) * (1 - u * 0.5),
+      band: Math.min(BANDS - 1, Math.floor(u * BANDS)),
+      wobble: (Math.random() - 0.5) * 0.06       // slight disk thickness
+    };
   });
 }
 
-function randf(min,max){ return Math.random()*(max-min)+min; }
-function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-
-function draw(t){
-  if (!enabled || prefersReduced){
-    ctx.clearRect(0,0,w,h);
-    return requestAnimationFrame(draw);
+function layout(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  for (const c of [starCanvas, canvas]){
+    c.width = Math.floor(W * DPR);
+    c.height = Math.floor(H * DPR);
   }
+  sctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-  // delta time
-  if (!draw.last) draw.last = t;
-  const dt = Math.min((t - draw.last) / 1000, 0.033);
-  draw.last = t;
-
-  ctx.clearRect(0,0,w,h);
-
-  // subtle vignette haze
-  const grad = ctx.createRadialGradient(w*0.5, h*0.18, 0, w*0.5, h*0.18, Math.max(w,h)*0.7);
-  grad.addColorStop(0, "rgba(185,140,255,0.10)");
-  grad.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,w,h);
-
-  // spawn logic
-  if (t - lastSpawn > SPAWN_INTERVAL_MS * randf(0.7, 1.3)){
-    spawnStar();
-    lastSpawn = t;
+  if (W > 900){
+    cx = W * 0.7; cy = H * 0.5; rh = Math.min(W, H) * 0.095;
+  } else {
+    cx = W * 0.5; cy = H * 0.27; rh = Math.min(W, H) * 0.12;
   }
+  drawStars();
+  makeParticles();
+  if (!running) drawFrame(0, true);
+}
 
-  // update & draw stars
-  for (let i = stars.length - 1; i >= 0; i--){
-    const s = stars[i];
-    s.age += dt;
-    s.x += s.vx * dt;
-    s.y += s.vy * dt;
+function drawStars(){
+  sctx.clearRect(0, 0, W, H);
+  // faint nebula glow around the black hole
+  const neb = sctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.7);
+  neb.addColorStop(0, "rgba(120, 60, 255, 0.16)");
+  neb.addColorStop(0.35, "rgba(80, 30, 160, 0.07)");
+  neb.addColorStop(1, "rgba(0, 0, 0, 0)");
+  sctx.fillStyle = neb;
+  sctx.fillRect(0, 0, W, H);
 
-    const p = clamp(s.age / s.life, 0, 1);
-    const fade = (1 - p) * (p < 0.12 ? (p/0.12) : 1);
+  const n = Math.floor((W * H) / 2600);
+  for (let i = 0; i < n; i++){
+    const x = Math.random() * W, y = Math.random() * H;
+    const r = Math.random() < 0.06 ? Math.random() * 1.2 + 0.8 : Math.random() * 0.8 + 0.2;
+    const tint = Math.random();
+    sctx.fillStyle = tint < 0.25 ? `rgba(200,170,255,${Math.random() * 0.7 + 0.2})`
+                                 : `rgba(255,255,255,${Math.random() * 0.6 + 0.15})`;
+    sctx.beginPath();
+    sctx.arc(x, y, r, 0, Math.PI * 2);
+    sctx.fill();
+  }
+}
 
-    const norm = Math.hypot(s.vx, s.vy);
-    const tx = s.x - (s.vx / norm) * s.len;
-    const ty = s.y - (s.vy / norm) * s.len;
+function drawParticle(x, y, size, alpha){
+  ctx.globalAlpha = alpha;
+  ctx.fillRect(x - size / 2, y - size / 2, size, size);
+}
 
-    const alphaHead = 0.50 * fade;
+function drawFrame(dt, still){
+  const X = cx + offX, Y = cy + offY;
 
-    const lg = ctx.createLinearGradient(s.x, s.y, tx, ty);
-    lg.addColorStop(0, `hsla(${s.hue}, ${s.sat}%, ${s.light}%, ${alphaHead})`);
-    lg.addColorStop(1, `hsla(${s.hue}, ${s.sat}%, ${Math.max(30, s.light-25)}%, 0)`);
+  // Fade the previous frame instead of clearing: gives motion-blur trails
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = still ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.2)";
+  ctx.fillRect(0, 0, W, H);
 
-    ctx.strokeStyle = lg;
-    ctx.lineWidth = s.width;
-    ctx.lineCap = "round";
+  ctx.globalCompositeOperation = "lighter";
 
-    ctx.shadowColor = `hsla(${s.hue}, ${s.sat}%, ${s.light}%, ${0.35 * fade})`;
-    ctx.shadowBlur = 12 * dpr;
+  // soft glow around the hole
+  const glow = ctx.createRadialGradient(X, Y, rh * 0.9, X, Y, rh * 5);
+  glow.addColorStop(0, "rgba(190, 120, 255, 0.07)");
+  glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = glow;
+  ctx.fillRect(X - rh * 5, Y - rh * 5, rh * 10, rh * 10);
 
-    ctx.beginPath();
-    ctx.moveTo(s.x, s.y);
-    ctx.lineTo(tx, ty);
-    ctx.stroke();
+  for (const p of particles) p.a += p.w * dt;
 
-    // tiny sparkle at head
-    const sparkle = (0.6 + 0.4*Math.sin((t/120) * s.twinkle)) * fade;
-    ctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, ${Math.min(96, s.light+10)}%, ${0.25 * sparkle})`;
-    ctx.shadowBlur = 10 * dpr;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, 2.2*dpr, 0, Math.PI*2);
-    ctx.fill();
+  // 1) far side of the disk + 2) its lensed image bent over the top
+  for (let b = BANDS - 1; b >= 0; b--){
+    ctx.fillStyle = bandColors[b];
+    for (const p of particles){
+      if (p.band !== b) continue;
+      const s = Math.sin(p.a), c = Math.cos(p.a);
+      if (s >= 0) continue;
+      const r = p.rn * rh;
+      const doppler = Math.max(0.25, 1 - 0.75 * c); // left side approaches → brighter
+      drawParticle(X + r * c, Y + r * s * TILT + p.wobble * rh, p.size, p.alpha * doppler * 0.9);
 
-    if (s.age >= s.life || s.x < -0.25*w || s.y > 1.35*h){
-      stars.splice(i, 1);
+      // lensed halo: far disk light curving over the top of the shadow
+      const R = rh * (1.1 + (p.rn - R_IN) * 0.3);
+      drawParticle(X + R * c, Y + R * s, p.size * 0.9, p.alpha * doppler * 0.8);
     }
   }
 
+  // faint lensed image under the hole (light from the near side bent underneath)
+  ctx.fillStyle = bandColors[1];
+  for (const p of particles){
+    const s = Math.sin(p.a);
+    if (s <= 0 || p.rn > 2.6) continue;
+    const c = Math.cos(p.a);
+    const R = rh * (1.06 + (p.rn - R_IN) * 0.12);
+    drawParticle(X + R * c, Y + R * s, p.size * 0.8, p.alpha * 0.22);
+  }
+
+  // 3) event horizon: pure black shadow with a soft edge
+  ctx.globalCompositeOperation = "source-over";
+  ctx.globalAlpha = 1;
+  const shadow = ctx.createRadialGradient(X, Y, rh * 0.94, X, Y, rh * 1.08);
+  shadow.addColorStop(0, "rgba(0,0,0,1)");
+  shadow.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = shadow;
+  ctx.beginPath();
+  ctx.arc(X, Y, rh * 1.08, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 4) photon ring
+  ctx.globalCompositeOperation = "lighter";
+  ctx.lineWidth = 1.6;
+  ctx.strokeStyle = "rgba(255, 220, 255, 0.55)";
+  ctx.shadowColor = "rgba(190, 120, 255, 0.9)";
+  ctx.shadowBlur = 18;
+  ctx.beginPath();
+  ctx.arc(X, Y, rh * 1.03, 0, Math.PI * 2);
+  ctx.stroke();
   ctx.shadowBlur = 0;
-  requestAnimationFrame(draw);
+
+  // 5) near side of the disk, crossing in front of the shadow
+  for (let b = BANDS - 1; b >= 0; b--){
+    ctx.fillStyle = bandColors[b];
+    for (const p of particles){
+      if (p.band !== b) continue;
+      const s = Math.sin(p.a);
+      if (s < 0) continue;
+      const c = Math.cos(p.a);
+      const r = p.rn * rh;
+      const doppler = Math.max(0.25, 1 - 0.75 * c);
+      drawParticle(X + r * c, Y + r * s * TILT + p.wobble * rh, p.size * 1.2, Math.min(1, p.alpha * doppler * 1.3));
+    }
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = "source-over";
 }
 
-// Toggle background FX
-const toggle = document.getElementById("toggleStars");
-toggle.addEventListener("click", () => {
-  enabled = !enabled;
-  toggle.setAttribute("aria-pressed", String(enabled));
-  toggle.textContent = enabled ? "Toggle Background FX" : "Enable Background FX";
-  if (!enabled) ctx.clearRect(0,0,w,h);
+let last = 0;
+function loop(t){
+  if (!running){ last = 0; return; }
+  const dt = last ? Math.min((t - last) / 1000, 0.05) : 0.016;
+  last = t;
+  // gentle parallax toward the mouse
+  offX += (mouseX - offX) * 0.04;
+  offY += (mouseY - offY) * 0.04;
+  drawFrame(dt, false);
+  requestAnimationFrame(loop);
+}
+
+function start(){
+  if (running) return;
+  running = true;
+  requestAnimationFrame(loop);
+}
+function stop(){ running = false; }
+
+window.addEventListener("resize", layout);
+window.addEventListener("pointermove", (e) => {
+  mouseX = (e.clientX / W - 0.5) * -24;
+  mouseY = (e.clientY / H - 0.5) * -16;
 });
 
-requestAnimationFrame(draw);
+// Fade the black hole down as you scroll so the content stays readable
+function onScroll(){
+  const p = Math.min(window.scrollY / (H * 0.8), 1);
+  canvas.style.opacity = String(1 - p * 0.6);
+}
+window.addEventListener("scroll", onScroll, { passive: true });
+
+// Pause when the tab is hidden (saves battery)
+let userPaused = false;
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) stop();
+  else if (!userPaused && !reduceMotion) start();
+});
+
+// Footer pause/play button
+const fxBtn = document.getElementById("toggleFx");
+fxBtn.addEventListener("click", () => {
+  userPaused = running;
+  if (running) stop(); else start();
+  fxBtn.textContent = running ? "Pause black hole" : "Play black hole";
+  fxBtn.setAttribute("aria-pressed", String(running));
+});
+if (reduceMotion){
+  fxBtn.textContent = "Play black hole";
+  fxBtn.setAttribute("aria-pressed", "false");
+}
+
+layout();
+onScroll();
+if (running){ running = false; start(); }
